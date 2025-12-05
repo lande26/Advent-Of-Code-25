@@ -22,16 +22,31 @@ int main() {
         ll a = stoll(r.substr(0, idx));
         ll b = stoll(r.substr(idx + 1));
         ll mx = to_string(b).size()/2;
-        for(int i = 1; i<=mx; i++){
-            ll den = pow10(i)+1;
-            ll pa = (a+den-1)/den;
-            ll pb = b/den;
-            pa = max(pa, pow10(i-1));
-            pb = min(pb, pow10(i)-1);
-            if(pa>pb) continue;
-            for(ll j = pa; j<=pb; j++) sum += j*den;
+        unordered_set<ll> vis;
+        ll size = to_string(b).size();
+        for(int i = 1; i<=9; i++){
+            ll den = pow10(i)-1;
+            for(ll k=2; k<=18; k++){
+                ll val = i*k;
+                if(val>size) break;
+                ll ten = pow10(val);
+                ll s = (ten-1)/den;
+                ll pa = (a+s-1)/s;
+                ll pb = b/s;
+                ll pmin = pow10(i-1);
+                ll pmax = pow10(i)-1;
+                if(pa<pmin) pa = pmin;
+                if(pb>pmax) pb = pmax;
+                if(pa>pb) continue;
+                for(ll j = pa; j<=pb; j++){
+                    ll v = j * s;
+                    if (vis.insert(v).second) {
+                        sum += v;
+                    }
+                }
+            }
         }
     }
-    cout << sum << endl; //20223751480
+    cout << sum << endl; 
     return 0;
 }
